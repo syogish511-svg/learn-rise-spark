@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } 
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import {
-  LayoutDashboard, Users, ClipboardList, Library, GraduationCap, Megaphone, Settings, LogOut, Menu, Moon, Sun, PanelLeftClose, PanelLeft,
+  LayoutDashboard, Users, ClipboardList, Library, GraduationCap, Megaphone, Settings, Sparkles, LogOut, Menu, Moon, Sun, PanelLeftClose, PanelLeft,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/lib/me";
@@ -21,9 +21,10 @@ export const Route = createFileRoute("/_authenticated")({
   component: Shell,
 });
 
-type NavItem = { to: "/dashboard" | "/students" | "/assignments" | "/resources" | "/tests" | "/announcements" | "/settings"; label: string; icon: typeof Users; staff?: boolean; hideParent?: boolean };
+type NavItem = { to: "/dashboard" | "/math-explainer" | "/students" | "/assignments" | "/resources" | "/tests" | "/announcements" | "/settings"; label: string; icon: typeof Users; staff?: boolean; hideParent?: boolean };
 const NAV: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/math-explainer", label: "Maths AI Explainer", icon: Sparkles, hideParent: true },
   { to: "/students", label: "Students", icon: Users, staff: true },
   { to: "/assignments", label: "Assignments", icon: ClipboardList, hideParent: true },
   { to: "/resources", label: "Resource library", icon: Library, hideParent: true },

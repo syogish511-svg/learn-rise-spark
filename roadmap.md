@@ -9,5 +9,6 @@
 - [ ] Announcements + settings (exam date, curriculum, audit log)
 - [ ] Review uploaded route spec (PROJECT_LEARN_RISE_SPARK) and fold in
 - [ ] Security finding: tighten `tests` SELECT policy (currently `using true`)
+- [x] Maths AI step-by-step explainer
 - [ ] Phase 3: AI tutor + teacher AI command centre (Lovable AI, server-side)
 - [ ] Phase 4: ICSE updates monitoring (scheduled job) + SMS/WhatsApp (needs provider credentials)
