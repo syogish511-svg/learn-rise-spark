@@ -46,7 +46,10 @@ function AuthPage() {
       options: { emailRedirectTo: window.location.origin, data: { full_name: fullName } },
     });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Check your email to confirm your account, then sign in.");
   }
 
