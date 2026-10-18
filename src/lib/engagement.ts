@@ -102,8 +102,10 @@ export function classifyEngagement(st: StudentStats): { category: Engagement; re
     return { category: "Academic support recommended", reasons };
   }
   const t = st.testPcts;
-  if (t.length >= 2 && t[t.length - 1] - t[t.length - 2] >= 10) {
-    reasons.push(`Latest test rose from ${Math.round(t[t.length - 2])}% to ${Math.round(t[t.length - 1])}%.`);
+  const prev = t.at(-2);
+  const last = t.at(-1);
+  if (prev !== undefined && last !== undefined && last - prev >= 10) {
+    reasons.push(`Latest test rose from ${Math.round(prev)}% to ${Math.round(last)}%.`);
     return { category: "Improving", reasons };
   }
   if (st.onTimePct !== null && st.onTimePct >= 80 && st.missing === 0) {

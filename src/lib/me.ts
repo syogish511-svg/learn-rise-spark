@@ -43,7 +43,7 @@ export function useMe() {
 export async function logActivity(action: string, entity?: string, entityId?: string, details: Record<string, unknown> = {}) {
   const { data } = await supabase.auth.getUser();
   if (!data.user) return;
-  await supabase.from("activity_log").insert({ user_id: data.user.id, action, entity, entity_id: entityId, details: details as never });
+  await supabase.from("activity_log").insert({ user_id: data.user.id, action, entity: entity ?? null, entity_id: entityId ?? null, details: details as never });
 }
 
 export async function audit(action: string, details: Record<string, unknown> = {}) {
