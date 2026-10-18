@@ -41,7 +41,7 @@ function StudentsPage() {
 
   async function onCreate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const f = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+    const f = Object.fromEntries(new FormData(e.currentTarget)) as { code: string; name: string; password: string; phone: string; parentName: string; parentPhone: string; email: string; role: string; studentId: string };
     try {
       await create({ data: { studentCode: f.code, fullName: f.name, password: f.password, phone: f.phone, parentName: f.parentName, parentPhone: f.parentPhone } });
       toast.success(`Student ${f.code.toUpperCase()} created`);
@@ -53,7 +53,7 @@ function StudentsPage() {
   }
   async function onCreateOther(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const f = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+    const f = Object.fromEntries(new FormData(e.currentTarget)) as { code: string; name: string; password: string; phone: string; parentName: string; parentPhone: string; email: string; role: string; studentId: string };
     try {
       await createOther({ data: { email: f.email, fullName: f.name, password: f.password, role: f.role as "teacher" | "parent", studentId: f.studentId || undefined } });
       toast.success("Account created");
