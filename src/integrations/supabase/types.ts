@@ -208,6 +208,102 @@ export type Database = {
           },
         ]
       }
+      doubt_queries: {
+        Row: {
+          attachment_name: string | null
+          attachment_path: string | null
+          body: string
+          chapter_id: string | null
+          created_at: string
+          id: string
+          status: Database["public"]["Enums"]["doubt_status"]
+          student_id: string
+          subject_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          attachment_name?: string | null
+          attachment_path?: string | null
+          body: string
+          chapter_id?: string | null
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["doubt_status"]
+          student_id: string
+          subject_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          attachment_name?: string | null
+          attachment_path?: string | null
+          body?: string
+          chapter_id?: string | null
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["doubt_status"]
+          student_id?: string
+          subject_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doubt_queries_chapter_id_fkey"
+            columns: ["chapter_id"]
+            isOneToOne: false
+            referencedRelation: "chapters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "doubt_queries_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "doubt_queries_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doubt_replies: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          doubt_id: string
+          id: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          created_at?: string
+          doubt_id: string
+          id?: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          doubt_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doubt_replies_doubt_id_fkey"
+            columns: ["doubt_id"]
+            isOneToOne: false
+            referencedRelation: "doubt_queries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       parent_links: {
         Row: {
           id: string
@@ -560,6 +656,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_view_doubt: {
+        Args: { _doubt: string; _uid: string }
+        Returns: boolean
+      }
       can_view_resource: {
         Args: { _resource: string; _uid: string }
         Returns: boolean
@@ -588,6 +688,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "teacher" | "student" | "parent"
+      doubt_status: "pending" | "answered" | "closed"
       submission_status:
         | "submitted"
         | "under_review"
@@ -721,6 +822,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "teacher", "student", "parent"],
+      doubt_status: ["pending", "answered", "closed"],
       submission_status: [
         "submitted",
         "under_review",
