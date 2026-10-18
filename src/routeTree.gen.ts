@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedMathExplainerRouteImport } from './routes/_authenticated/math-explainer'
+import { Route as ApiMathExplainRouteImport } from './routes/api/math-explain'
 import { Route as AuthenticatedStudentsIndexRouteImport } from './routes/_authenticated/students.index'
 import { Route as AuthenticatedStudentsIdRouteImport } from './routes/_authenticated/students.$id'
 
@@ -35,6 +37,17 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMathExplainerRoute =
+  AuthenticatedMathExplainerRouteImport.update({
+    id: '/math-explainer',
+    path: '/math-explainer',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const ApiMathExplainRoute = ApiMathExplainRouteImport.update({
+  id: '/api/math-explain',
+  path: '/api/math-explain',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedStudentsIndexRoute =
   AuthenticatedStudentsIndexRouteImport.update({
     id: '/students/',
@@ -51,6 +64,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/math-explainer': typeof AuthenticatedMathExplainerRoute
+  '/api/math-explain': typeof ApiMathExplainRoute
   '/students/$id': typeof AuthenticatedStudentsIdRoute
   '/students/': typeof AuthenticatedStudentsIndexRoute
 }
@@ -58,6 +73,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/math-explainer': typeof AuthenticatedMathExplainerRoute
+  '/api/math-explain': typeof ApiMathExplainRoute
   '/students/$id': typeof AuthenticatedStudentsIdRoute
   '/students': typeof AuthenticatedStudentsIndexRoute
 }
@@ -67,20 +84,38 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/math-explainer': typeof AuthenticatedMathExplainerRoute
+  '/api/math-explain': typeof ApiMathExplainRoute
   '/_authenticated/students/$id': typeof AuthenticatedStudentsIdRoute
   '/_authenticated/students/': typeof AuthenticatedStudentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/students/$id' | '/students/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/math-explainer'
+    | '/api/math-explain'
+    | '/students/$id'
+    | '/students/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/students/$id' | '/students'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/math-explainer'
+    | '/api/math-explain'
+    | '/students/$id'
+    | '/students'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/dashboard'
+    | '/_authenticated/math-explainer'
+    | '/api/math-explain'
     | '/_authenticated/students/$id'
     | '/_authenticated/students/'
   fileRoutesById: FileRoutesById
@@ -89,6 +124,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiMathExplainRoute: typeof ApiMathExplainRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -121,6 +157,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/math-explainer': {
+      id: '/_authenticated/math-explainer'
+      path: '/math-explainer'
+      fullPath: '/math-explainer'
+      preLoaderRoute: typeof AuthenticatedMathExplainerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/math-explain': {
+      id: '/api/math-explain'
+      path: '/api/math-explain'
+      fullPath: '/api/math-explain'
+      preLoaderRoute: typeof ApiMathExplainRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/students/': {
       id: '/_authenticated/students/'
       path: '/students'
@@ -140,12 +190,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedMathExplainerRoute: typeof AuthenticatedMathExplainerRoute
   AuthenticatedStudentsIdRoute: typeof AuthenticatedStudentsIdRoute
   AuthenticatedStudentsIndexRoute: typeof AuthenticatedStudentsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedMathExplainerRoute: AuthenticatedMathExplainerRoute,
   AuthenticatedStudentsIdRoute: AuthenticatedStudentsIdRoute,
   AuthenticatedStudentsIndexRoute: AuthenticatedStudentsIndexRoute,
 }
@@ -157,6 +209,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiMathExplainRoute: ApiMathExplainRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
