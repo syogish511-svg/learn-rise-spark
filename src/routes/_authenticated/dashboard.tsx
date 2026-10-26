@@ -11,9 +11,10 @@ import { StudentOverview } from "@/components/StudentOverview";
 import { ExamCountdown } from "@/components/ExamCountdown";
 import { SCHOOL } from "@/lib/school";
 import { SchoolLogo } from "@/components/SchoolMark";
+import { portalHead } from "@/lib/portal";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — SRSV Class 10" }, { name: "description", content: "Your Class 10 ICSE dashboard." }] }),
+  head: () => portalHead("Dashboard", "Your Class 10 ICSE progress, assignments and marks."),
   component: Dashboard,
 });
 
@@ -82,7 +83,8 @@ function TeacherDashboard() {
   });
   if (q.isLoading) return <Loading />;
   if (q.error) return <ErrorNote error={q.error} />;
-  const b = q.data!;
+  const b = q.data;
+  if (!b) return <Loading />;
   const active = b.students.filter((s) => s.is_active);
   const today = b.assignments.filter((a) => isToday(new Date(a.due_at)));
   const todaySubs = b.submissions.filter((s) => today.some((a) => a.id === s.assignment_id));
@@ -101,7 +103,7 @@ function TeacherDashboard() {
   });
   const latestTest = b.tests[b.tests.length - 1];
   const latestMarks = latestTest ? b.marks.filter((m) => m.test_id === latestTest.id) : [];
-  const latestAvg = latestMarks.length ? Math.round(latestMarks.reduce((x, m) => x + Number(m.marks), 0) / latestMarks.length / Number(latestTest!.max_marks) * 100) : null;
+  const latestAvg = latestMarks.length && latestTest && Number(latestTest.max_marks) > 0 ? Math.round(latestMarks.reduce((x, m) => x + Number(m.marks), 0) / latestMarks.length / Number(latestTest.max_marks) * 100) : null;
 
   return (
     <div className="space-y-6">

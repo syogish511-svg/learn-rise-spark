@@ -79,7 +79,7 @@ function AuthPage() {
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="student">Student</TabsTrigger>
               <TabsTrigger value="staff">Teacher / Parent</TabsTrigger>
-              <TabsTrigger value="setup">First setup</TabsTrigger>
+              <TabsTrigger value="setup">Register</TabsTrigger>
             </TabsList>
             <TabsContent value="student">
               <form
@@ -124,7 +124,7 @@ function AuthPage() {
             </TabsContent>
             <TabsContent value="setup">
               <p className="mt-4 rounded-lg bg-accent p-3 text-xs text-accent-foreground">
-                The very first account created becomes the school administrator. Later sign-ups get no access until an administrator grants it.
+                New accounts have no portal access until a school administrator assigns a role. Student accounts are issued by the school.
               </p>
               <form
                 className="mt-4 space-y-4"

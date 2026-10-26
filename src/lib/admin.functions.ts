@@ -38,7 +38,8 @@ export const createStudent = createServerFn({ method: "POST" })
     });
     if (error) throw new Error(error.message.includes("already") ? "That Student ID is already in use." : error.message);
     const id = created.user.id;
-    await supabaseAdmin.from("user_roles").insert({ user_id: id, role: "student" });
+    const roleResult = await supabaseAdmin.from("user_roles").insert({ user_id: id, role: "student" });
+    if (roleResult.error) throw new Error(roleResult.error.message);
     await supabaseAdmin
       .from("profiles")
       .update({ phone: data.phone || null, parent_name: data.parentName || null, parent_phone: data.parentPhone || null })
@@ -71,9 +72,11 @@ export const createStaffOrParent = createServerFn({ method: "POST" })
     });
     if (error) throw new Error(error.message);
     const id = created.user.id;
-    await supabaseAdmin.from("user_roles").insert({ user_id: id, role: data.role });
+    const roleResult = await supabaseAdmin.from("user_roles").insert({ user_id: id, role: data.role });
+    if (roleResult.error) throw new Error(roleResult.error.message);
     if (data.role === "parent" && data.studentId) {
-      await supabaseAdmin.from("parent_links").insert({ parent_id: id, student_id: data.studentId });
+      const linked = await supabaseAdmin.from("parent_links").insert({ parent_id: id, student_id: data.studentId });
+      if (linked.error) throw new Error(linked.error.message);
     }
     await writeAudit(context as Ctx, `${data.role}.create`, { user_id: id, email: data.email, student_id: data.studentId });
     return { id };
@@ -97,13 +100,37 @@ export const setStudentActive = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ userId: z.string().uuid(), active: z.boolean() }).parse(d))
   .handler(async ({ data, context }) => {
-    await assertStaff(context as Ctx);
+    await assertStaff(context as Ctx, true);
+    const { data: roles, error: roleError } = await context.supabase.from("user_roles").select("role").eq("user_id", data.userId);
+    if (roleError || !roles?.some(r => r.role === "student") || roles.some(r => r.role !== "student")) throw new Error("Only student-only accounts can be activated or deactivated here.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.auth.admin.updateUserById(data.userId, {
       ban_duration: data.active ? "none" : "876000h",
     });
     if (error) throw new Error(error.message);
-    await supabaseAdmin.from("profiles").update({ is_active: data.active }).eq("id", data.userId);
+    const updated = await supabaseAdmin.from("profiles").update({ is_active: data.active }).eq("id", data.userId).select("id").single();
+    if (updated.error) throw new Error(updated.error.message);
     await writeAudit(context as Ctx, data.active ? "student.activate" : "student.deactivate", { user_id: data.userId });
+    return { ok: true };
+  });
+
+export const assignAccountRole = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ userId: z.string().uuid(), role: z.enum(["teacher", "student", "parent"]), enabled: z.boolean() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertStaff(context as Ctx, true);
+    const { data: targetRoles, error: roleError } = await context.supabase.from("user_roles").select("role").eq("user_id", data.userId);
+    if (roleError || targetRoles?.some(r => r.role === "admin")) throw new Error("Administrator roles are managed through secure school administration only.");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const profile = await supabaseAdmin.from("profiles").select("id").eq("id", data.userId).single();
+    if (profile.error) throw new Error("Account not found.");
+    if (data.enabled && !targetRoles?.some(r => r.role === data.role)) {
+      const r = await supabaseAdmin.from("user_roles").insert({ user_id: data.userId, role: data.role });
+      if (r.error) throw new Error(r.error.message);
+    } else if (!data.enabled) {
+      const r = await supabaseAdmin.from("user_roles").delete().eq("user_id", data.userId).eq("role", data.role);
+      if (r.error) throw new Error(r.error.message);
+    }
+    await writeAudit(context as Ctx, "account.role", { user_id: data.userId, role: data.role, enabled: data.enabled });
     return { ok: true };
   });

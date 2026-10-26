@@ -106,6 +106,8 @@ export type Database = {
           id: string
           max_marks: number
           published: boolean
+          question_file_name: string | null
+          question_file_path: string | null
           subject_id: string | null
           title: string
         }
@@ -119,6 +121,8 @@ export type Database = {
           id?: string
           max_marks?: number
           published?: boolean
+          question_file_name?: string | null
+          question_file_path?: string | null
           subject_id?: string | null
           title: string
         }
@@ -132,6 +136,8 @@ export type Database = {
           id?: string
           max_marks?: number
           published?: boolean
+          question_file_name?: string | null
+          question_file_path?: string | null
           subject_id?: string | null
           title?: string
         }
@@ -486,6 +492,7 @@ export type Database = {
       submissions: {
         Row: {
           assignment_id: string
+          attachments: Json
           feedback: string | null
           file_name: string
           file_path: string
@@ -500,6 +507,7 @@ export type Database = {
         }
         Insert: {
           assignment_id: string
+          attachments?: Json
           feedback?: string | null
           file_name?: string
           file_path: string
@@ -514,6 +522,7 @@ export type Database = {
         }
         Update: {
           assignment_id?: string
+          attachments?: Json
           feedback?: string | null
           file_name?: string
           file_path?: string

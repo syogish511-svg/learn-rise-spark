@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { classifyEngagement, computeStats } from "./engagement";
+import { percentage } from "./portal-validation";
 
 export async function fetchStudents() {
   const { data: roles, error } = await supabase.from("user_roles").select("user_id").eq("role", "student");
@@ -37,10 +38,9 @@ export function studentSummary(b: Pick<ClassBundle, "assignments" | "submissions
   const testById = new Map(b.tests.map((t) => [t.id, t]));
   const marks = b.marks
     .filter((x) => x.student_id === studentId)
-    .map((m) => ({ ...m, test: testById.get(m.test_id)! }))
-    .filter((m) => m.test)
+    .flatMap((m) => { const test = testById.get(m.test_id); return test ? [{ ...m, test }] : []; })
     .sort((x, y) => x.test.test_date.localeCompare(y.test.test_date));
-  const pcts = marks.map((m) => (Number(m.marks) / Number(m.test.max_marks)) * 100);
+  const pcts = marks.flatMap((m) => { const value = percentage(Number(m.marks), Number(m.test.max_marks)); return value === null ? [] : [value]; });
   const stats = computeStats(
     b.assignments.map((x) => ({ ...x, max_marks: Number(x.max_marks) })),
     subs.map((x) => ({ ...x, marks: x.marks === null ? null : Number(x.marks) })),
