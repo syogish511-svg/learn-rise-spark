@@ -4,9 +4,10 @@ import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/ui-kit";
 import { StudentOverview } from "@/components/StudentOverview";
+import { portalHead } from "@/lib/portal";
 
 export const Route = createFileRoute("/_authenticated/students/$id")({
-  head: () => ({ meta: [{ title: "Student profile — SRSV Class 10" }, { name: "description", content: "Detailed student progress report." }] }),
+  head: () => portalHead("Student profile", "Detailed Class 10 student progress report."),
   component: StudentProfile,
 });
 

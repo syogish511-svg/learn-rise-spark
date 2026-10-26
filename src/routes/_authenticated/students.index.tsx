@@ -7,6 +7,7 @@ import { UserPlus, Download, KeyRound, Power, Search, UserCog } from "lucide-rea
 import { fetchClassBundle, studentSummary, downloadCsv } from "@/lib/data";
 import { createStudent, createStaffOrParent, resetUserPassword, setStudentActive } from "@/lib/admin.functions";
 import { useMe } from "@/lib/me";
+import { portalHead } from "@/lib/portal";
 import { PageHeader, Loading, ErrorNote, EngagementBadge, EmptyState } from "@/components/ui-kit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/_authenticated/students/")({
-  head: () => ({ meta: [{ title: "Students — SRSV Class 10" }, { name: "description", content: "Manage Class 10 student accounts." }] }),
+  head: () => portalHead("Students", "Manage Class 10 student accounts and progress."),
   component: StudentsPage,
 });
 
@@ -33,7 +34,8 @@ function StudentsPage() {
 
   if (q.isLoading) return <Loading />;
   if (q.error) return <ErrorNote error={q.error} />;
-  const b = q.data!;
+  const b = q.data;
+  if (!b || !me?.isStaff) return <EmptyState title="Teacher access required" />;
   const rows = b.students
     .filter((s) => `${s.full_name} ${s.student_code}`.toLowerCase().includes(search.toLowerCase()))
     .map((s) => ({ s, ...studentSummary(b, s.id) }));
@@ -164,7 +166,7 @@ function StudentsPage() {
                   <td className="p-3"><EngagementBadge category={engagement.category} /></td>
                   <td className="p-3 text-right whitespace-nowrap">
                     <Button size="icon" variant="ghost" title="Reset password" onClick={() => onReset(s.id, s.full_name)}><KeyRound /></Button>
-                    <Button size="icon" variant="ghost" title={s.is_active ? "Deactivate" : "Reactivate"} onClick={() => onToggle(s.id, !s.is_active)}><Power className={s.is_active ? "" : "text-destructive"} /></Button>
+                    {me?.isAdmin && <Button size="icon" variant="ghost" title={s.is_active ? "Deactivate" : "Reactivate"} onClick={() => onToggle(s.id, !s.is_active)}><Power className={s.is_active ? "" : "text-destructive"} /></Button>}
                   </td>
                 </tr>
               ))}
