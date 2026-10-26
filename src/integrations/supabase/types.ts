@@ -492,6 +492,7 @@ export type Database = {
       submissions: {
         Row: {
           assignment_id: string
+          attachments: Json
           feedback: string | null
           file_name: string
           file_path: string
@@ -506,6 +507,7 @@ export type Database = {
         }
         Insert: {
           assignment_id: string
+          attachments?: Json
           feedback?: string | null
           file_name?: string
           file_path: string
@@ -520,6 +522,7 @@ export type Database = {
         }
         Update: {
           assignment_id?: string
+          attachments?: Json
           feedback?: string | null
           file_name?: string
           file_path?: string
