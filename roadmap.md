@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] One-pass portal: assignments/uploads/reviews, doubts/replies, resources, tests/marks, announcements/settings, account permissions, verification and concise implementation report.
+
 - [x] Design system, logo, favicon, landing, auth (student ID + staff/parent email)
 - [x] DB schema + RLS + storage buckets (profiles, roles, assignments, submissions, resources, tests, marks, announcements, audit)
 - [x] Role dashboards, students list/profile, engagement logic + tests
