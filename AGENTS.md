@@ -13,3 +13,4 @@
 - Private upload metadata is stored as bucket paths, with short-lived signed links generated on demand; storage and database ownership rules must remain consistent.
 - Role changes run only through authenticated administrator-validated server functions; administrator role assignment is never exposed to public signup.
 - Marks, file ownership, and class resource visibility are enforced in database triggers and policies in addition to form validation.
+- Settings use existing app_settings, curriculum and audit tables through shared loader-backed queries; this preserves the countdown and avoids parallel configuration stores.

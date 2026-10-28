@@ -12,8 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAnnouncementsRouteImport } from './routes/_authenticated/announcements'
+import { Route as AuthenticatedAssignmentsRouteImport } from './routes/_authenticated/assignments'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDoubtsRouteImport } from './routes/_authenticated/doubts'
 import { Route as AuthenticatedMathExplainerRouteImport } from './routes/_authenticated/math-explainer'
+import { Route as AuthenticatedResourcesRouteImport } from './routes/_authenticated/resources'
+import { Route as AuthenticatedTestsRouteImport } from './routes/_authenticated/tests'
 import { Route as ApiMathExplainRouteImport } from './routes/api/math-explain'
 import { Route as AuthenticatedStudentsIndexRouteImport } from './routes/_authenticated/students.index'
 import { Route as AuthenticatedStudentsIdRouteImport } from './routes/_authenticated/students.$id'
@@ -32,9 +37,26 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAnnouncementsRoute =
+  AuthenticatedAnnouncementsRouteImport.update({
+    id: '/announcements',
+    path: '/announcements',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAssignmentsRoute =
+  AuthenticatedAssignmentsRouteImport.update({
+    id: '/assignments',
+    path: '/assignments',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDoubtsRoute = AuthenticatedDoubtsRouteImport.update({
+  id: '/doubts',
+  path: '/doubts',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedMathExplainerRoute =
@@ -43,6 +65,16 @@ const AuthenticatedMathExplainerRoute =
     path: '/math-explainer',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedResourcesRoute = AuthenticatedResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTestsRoute = AuthenticatedTestsRouteImport.update({
+  id: '/tests',
+  path: '/tests',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiMathExplainRoute = ApiMathExplainRouteImport.update({
   id: '/api/math-explain',
   path: '/api/math-explain',
@@ -63,8 +95,13 @@ const AuthenticatedStudentsIdRoute = AuthenticatedStudentsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/announcements': typeof AuthenticatedAnnouncementsRoute
+  '/assignments': typeof AuthenticatedAssignmentsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/doubts': typeof AuthenticatedDoubtsRoute
   '/math-explainer': typeof AuthenticatedMathExplainerRoute
+  '/resources': typeof AuthenticatedResourcesRoute
+  '/tests': typeof AuthenticatedTestsRoute
   '/api/math-explain': typeof ApiMathExplainRoute
   '/students/$id': typeof AuthenticatedStudentsIdRoute
   '/students/': typeof AuthenticatedStudentsIndexRoute
@@ -72,8 +109,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/announcements': typeof AuthenticatedAnnouncementsRoute
+  '/assignments': typeof AuthenticatedAssignmentsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/doubts': typeof AuthenticatedDoubtsRoute
   '/math-explainer': typeof AuthenticatedMathExplainerRoute
+  '/resources': typeof AuthenticatedResourcesRoute
+  '/tests': typeof AuthenticatedTestsRoute
   '/api/math-explain': typeof ApiMathExplainRoute
   '/students/$id': typeof AuthenticatedStudentsIdRoute
   '/students': typeof AuthenticatedStudentsIndexRoute
@@ -83,8 +125,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/announcements': typeof AuthenticatedAnnouncementsRoute
+  '/_authenticated/assignments': typeof AuthenticatedAssignmentsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/doubts': typeof AuthenticatedDoubtsRoute
   '/_authenticated/math-explainer': typeof AuthenticatedMathExplainerRoute
+  '/_authenticated/resources': typeof AuthenticatedResourcesRoute
+  '/_authenticated/tests': typeof AuthenticatedTestsRoute
   '/api/math-explain': typeof ApiMathExplainRoute
   '/_authenticated/students/$id': typeof AuthenticatedStudentsIdRoute
   '/_authenticated/students/': typeof AuthenticatedStudentsIndexRoute
@@ -94,8 +141,13 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/announcements'
+    | '/assignments'
     | '/dashboard'
+    | '/doubts'
     | '/math-explainer'
+    | '/resources'
+    | '/tests'
     | '/api/math-explain'
     | '/students/$id'
     | '/students/'
@@ -103,8 +155,13 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/announcements'
+    | '/assignments'
     | '/dashboard'
+    | '/doubts'
     | '/math-explainer'
+    | '/resources'
+    | '/tests'
     | '/api/math-explain'
     | '/students/$id'
     | '/students'
@@ -113,8 +170,13 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/announcements'
+    | '/_authenticated/assignments'
     | '/_authenticated/dashboard'
+    | '/_authenticated/doubts'
     | '/_authenticated/math-explainer'
+    | '/_authenticated/resources'
+    | '/_authenticated/tests'
     | '/api/math-explain'
     | '/_authenticated/students/$id'
     | '/_authenticated/students/'
@@ -150,6 +212,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/announcements': {
+      id: '/_authenticated/announcements'
+      path: '/announcements'
+      fullPath: '/announcements'
+      preLoaderRoute: typeof AuthenticatedAnnouncementsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/assignments': {
+      id: '/_authenticated/assignments'
+      path: '/assignments'
+      fullPath: '/assignments'
+      preLoaderRoute: typeof AuthenticatedAssignmentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -157,11 +233,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/doubts': {
+      id: '/_authenticated/doubts'
+      path: '/doubts'
+      fullPath: '/doubts'
+      preLoaderRoute: typeof AuthenticatedDoubtsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/math-explainer': {
       id: '/_authenticated/math-explainer'
       path: '/math-explainer'
       fullPath: '/math-explainer'
       preLoaderRoute: typeof AuthenticatedMathExplainerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/resources': {
+      id: '/_authenticated/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof AuthenticatedResourcesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tests': {
+      id: '/_authenticated/tests'
+      path: '/tests'
+      fullPath: '/tests'
+      preLoaderRoute: typeof AuthenticatedTestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/math-explain': {
@@ -189,15 +286,25 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAnnouncementsRoute: typeof AuthenticatedAnnouncementsRoute
+  AuthenticatedAssignmentsRoute: typeof AuthenticatedAssignmentsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDoubtsRoute: typeof AuthenticatedDoubtsRoute
   AuthenticatedMathExplainerRoute: typeof AuthenticatedMathExplainerRoute
+  AuthenticatedResourcesRoute: typeof AuthenticatedResourcesRoute
+  AuthenticatedTestsRoute: typeof AuthenticatedTestsRoute
   AuthenticatedStudentsIdRoute: typeof AuthenticatedStudentsIdRoute
   AuthenticatedStudentsIndexRoute: typeof AuthenticatedStudentsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAnnouncementsRoute: AuthenticatedAnnouncementsRoute,
+  AuthenticatedAssignmentsRoute: AuthenticatedAssignmentsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDoubtsRoute: AuthenticatedDoubtsRoute,
   AuthenticatedMathExplainerRoute: AuthenticatedMathExplainerRoute,
+  AuthenticatedResourcesRoute: AuthenticatedResourcesRoute,
+  AuthenticatedTestsRoute: AuthenticatedTestsRoute,
   AuthenticatedStudentsIdRoute: AuthenticatedStudentsIdRoute,
   AuthenticatedStudentsIndexRoute: AuthenticatedStudentsIndexRoute,
 }
