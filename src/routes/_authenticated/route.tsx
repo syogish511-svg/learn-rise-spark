@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } 
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import {
-  LayoutDashboard, Users, Sparkles, LogOut, Menu, Moon, Sun, PanelLeftClose, PanelLeft,
+  LayoutDashboard, Users, Sparkles, LogOut, Menu, Moon, Sun, PanelLeftClose, PanelLeft, BookOpen, ClipboardList, MessageCircle, BarChart3, Megaphone, Settings,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/lib/me";
@@ -21,11 +21,17 @@ export const Route = createFileRoute("/_authenticated")({
   component: Shell,
 });
 
-type NavItem = { to: "/dashboard" | "/math-explainer" | "/students"; label: string; icon: typeof Users; staff?: boolean; hideParent?: boolean };
+type NavItem = { to: "/dashboard" | "/math-explainer" | "/students" | "/assignments" | "/resources" | "/doubts" | "/tests" | "/announcements" | "/settings"; label: string; icon: typeof Users; staff?: boolean; hideParent?: boolean };
 const NAV: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/math-explainer", label: "Maths AI Explainer", icon: Sparkles, hideParent: true },
   { to: "/students", label: "Students", icon: Users, staff: true },
+  { to: "/assignments", label: "Assignments", icon: ClipboardList },
+  { to: "/resources", label: "Resource Library", icon: BookOpen, hideParent: true },
+  { to: "/doubts", label: "Ask a Doubt", icon: MessageCircle, hideParent: true },
+  { to: "/tests", label: "Tests & Marks", icon: BarChart3 },
+  { to: "/announcements", label: "Announcements", icon: Megaphone },
+  { to: "/settings", label: "Settings", icon: Settings, staff: true },
 ];
 
 function Shell() {
