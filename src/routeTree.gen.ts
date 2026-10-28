@@ -18,6 +18,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDoubtsRouteImport } from './routes/_authenticated/doubts'
 import { Route as AuthenticatedMathExplainerRouteImport } from './routes/_authenticated/math-explainer'
 import { Route as AuthenticatedResourcesRouteImport } from './routes/_authenticated/resources'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTestsRouteImport } from './routes/_authenticated/tests'
 import { Route as ApiMathExplainRouteImport } from './routes/api/math-explain'
 import { Route as AuthenticatedStudentsIndexRouteImport } from './routes/_authenticated/students.index'
@@ -70,6 +71,11 @@ const AuthenticatedResourcesRoute = AuthenticatedResourcesRouteImport.update({
   path: '/resources',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTestsRoute = AuthenticatedTestsRouteImport.update({
   id: '/tests',
   path: '/tests',
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/doubts': typeof AuthenticatedDoubtsRoute
   '/math-explainer': typeof AuthenticatedMathExplainerRoute
   '/resources': typeof AuthenticatedResourcesRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/tests': typeof AuthenticatedTestsRoute
   '/api/math-explain': typeof ApiMathExplainRoute
   '/students/$id': typeof AuthenticatedStudentsIdRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/doubts': typeof AuthenticatedDoubtsRoute
   '/math-explainer': typeof AuthenticatedMathExplainerRoute
   '/resources': typeof AuthenticatedResourcesRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/tests': typeof AuthenticatedTestsRoute
   '/api/math-explain': typeof ApiMathExplainRoute
   '/students/$id': typeof AuthenticatedStudentsIdRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   '/_authenticated/doubts': typeof AuthenticatedDoubtsRoute
   '/_authenticated/math-explainer': typeof AuthenticatedMathExplainerRoute
   '/_authenticated/resources': typeof AuthenticatedResourcesRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tests': typeof AuthenticatedTestsRoute
   '/api/math-explain': typeof ApiMathExplainRoute
   '/_authenticated/students/$id': typeof AuthenticatedStudentsIdRoute
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
     | '/doubts'
     | '/math-explainer'
     | '/resources'
+    | '/settings'
     | '/tests'
     | '/api/math-explain'
     | '/students/$id'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/doubts'
     | '/math-explainer'
     | '/resources'
+    | '/settings'
     | '/tests'
     | '/api/math-explain'
     | '/students/$id'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/_authenticated/doubts'
     | '/_authenticated/math-explainer'
     | '/_authenticated/resources'
+    | '/_authenticated/settings'
     | '/_authenticated/tests'
     | '/api/math-explain'
     | '/_authenticated/students/$id'
@@ -254,6 +266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedResourcesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/tests': {
       id: '/_authenticated/tests'
       path: '/tests'
@@ -292,6 +311,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDoubtsRoute: typeof AuthenticatedDoubtsRoute
   AuthenticatedMathExplainerRoute: typeof AuthenticatedMathExplainerRoute
   AuthenticatedResourcesRoute: typeof AuthenticatedResourcesRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTestsRoute: typeof AuthenticatedTestsRoute
   AuthenticatedStudentsIdRoute: typeof AuthenticatedStudentsIdRoute
   AuthenticatedStudentsIndexRoute: typeof AuthenticatedStudentsIndexRoute
@@ -304,6 +324,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDoubtsRoute: AuthenticatedDoubtsRoute,
   AuthenticatedMathExplainerRoute: AuthenticatedMathExplainerRoute,
   AuthenticatedResourcesRoute: AuthenticatedResourcesRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTestsRoute: AuthenticatedTestsRoute,
   AuthenticatedStudentsIdRoute: AuthenticatedStudentsIdRoute,
   AuthenticatedStudentsIndexRoute: AuthenticatedStudentsIndexRoute,
